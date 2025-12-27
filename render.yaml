@@ -1,7 +1,7 @@
 services:
   - type: web
     name: gymapp
-    env: java
+    runtime: java   # <--- this is required
     plan: free
     region: oregon
     branch: master  # or main if your branch is main
