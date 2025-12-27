@@ -1,12 +1,11 @@
 services:
   - type: web
     name: gymapp
-    runtime: java   # <--- this is required
+    runtime: docker
     plan: free
     region: oregon
-    branch: master  # or main if your branch is main
-    buildCommand: mvn clean package -DskipTests
-    startCommand: java -jar target/gymapp-0.0.1-SNAPSHOT.jar
+    branch: master
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://db.yyayftssbjgnhjcjxzjp.supabase.co:5432/postgres?sslmode=require
