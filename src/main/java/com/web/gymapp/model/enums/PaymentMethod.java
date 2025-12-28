@@ -1,4 +1,4 @@
-package com.web.gymapp.model;
+package com.web.gymapp.model.enums;
 
 /**
  * Author: Bassir El Houssein
@@ -7,5 +7,5 @@ package com.web.gymapp.model;
 
 
 public enum PaymentMethod {
-    CASH
+    CASH,CHEQUE
 }

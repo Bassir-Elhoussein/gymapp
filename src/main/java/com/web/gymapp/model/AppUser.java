@@ -2,18 +2,16 @@ package com.web.gymapp.model;
 /**
  * Author: Bassir El Houssein
  */
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.web.gymapp.model.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,64 +22,60 @@ import java.util.List;
 @Table(name = "app_user")
 public class AppUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(nullable = false, unique = true)
-    @NotNull(message = "Email cannot be null")
-    @NotEmpty(message = "Email cannot be empty")
-    private String email;
-
-
-    @Column(nullable = false)
-    @NotNull(message = "Password cannot be null")
-    @NotEmpty(message = "Password cannot be empty")
-    private String password;
+    /**
+     * Staff/Admin users who manage the gym system
+     * Used for authentication and tracking who processed payments
+     */
 
 
 
-    private String username;
-    private String phone;
-    private String position;
-    private String avatar;
-    @Column(updatable = false)
-    public LocalDate createdAt;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    public LocalDate updatedAt;
+        @Column(unique = true, nullable = false)
+        private String username;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDate.now();
-        this.updatedAt = LocalDate.now();
+        @Column(nullable = false)
+        private String password; // Store hashed password (use BCrypt)
+
+        private String fullName;
+
+        private String email;
+
+        private String phone;
+
+        @Enumerated(EnumType.STRING)
+        @Column(nullable = false)
+        private Role role; // ADMIN or STAFF
+
+        private Boolean isActive; // Can be used to disable user accounts
+
+        private LocalDateTime createdAt;
+        private LocalDateTime lastLogin;
+
+        @PrePersist
+        public void prePersist() {
+            this.createdAt = LocalDateTime.now();
+            if (this.isActive == null) {
+                this.isActive = true;
+            }
+            if (this.role == null) {
+                this.role = Role.STAFF;
+            }
+        }
+
+        // Helper methods
+        public boolean isAdmin() {
+            return this.role == Role.ADMIN;
+        }
+
+        public boolean isStaff() {
+            return this.role == Role.STAFF;
+        }
+
+        public void updateLastLogin() {
+            this.lastLogin = LocalDateTime.now();
+        }
     }
-
-    @PreUpdate
-    protected void onUpdate() {
-        System.out.println("🔥 PreUpdate called!");
-        this.updatedAt = LocalDate.now();
-    }
-    private boolean active;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private UserRole role;
-
-//    @JsonIgnore
-//    @ManyToOne
-//    private Team team;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Notification> notifications;
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<CompetencyHistory> competencyHistories;
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<TrainingHistory> trainingHistories;
-
-
-
-}
