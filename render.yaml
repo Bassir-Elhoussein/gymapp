@@ -8,8 +8,8 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://db.yyayftssbjgnhjcjxzjp.supabase.co:5432/postgres?sslmode=require
+        value: jdbc:postgresql://dpg-d586vuili9vc739su3ug-a:5432/gymapptest
       - key: SPRING_DATASOURCE_USERNAME
-        value: postgres
+        value: gymapptest
       - key: SPRING_DATASOURCE_PASSWORD
-        value: QQQQQQWERTYUIOP@a+4714536=393
+        value: wbvDRnUN74uEPjacv4A5NcfFnUXb4IYu
